@@ -9,7 +9,7 @@ export default function InitialScreen({onChange}){
             <p className='text-xs'>
                 Select a project or get started whit a new one
             </p>
-            <button className='bg-amber-950 px-3.5 py-1 font-serif text-amber-50 rounded hover:bg-amber-900' onClick={onChange}>
+            <button className='bg-amber-950 px-3.5 py-1 font-serif text-amber-50 rounded hover:bg-amber-900' onClick={() => onChange('createProject')}>
                 Create new project
             </button>
         </div>
