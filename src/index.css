@@ -1,0 +1,12 @@
+@import "tailwindcss";
+
+@theme{
+    --font-roboto: 'Roboto', sans-serif;
+}
+/* div {
+    width: max-content;
+}
+
+div aside {
+
+} */
