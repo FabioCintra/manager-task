@@ -11,7 +11,8 @@ export default function InsideBar({projects, changeScreen}){
                 + Add Project
             </button>
             <ol >
-                {projects.map(project => <ButtonInsideList>{project.title}</ButtonInsideList>)}
+                {projects.map((project,index) => <ButtonInsideList changeScreen={changeScreen} key={index} project={project}/>
+                )}
             </ol>
         </aside>
     );
