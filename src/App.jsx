@@ -22,14 +22,10 @@ const ALL_SCREENS ={
 function App() {
 
   const [screen, setScreen] = useState('initialScreen');
-  const [listProject, setListProject] = useState([{
-    title:'Teste',
-    description:'Estou fazendo um descricao maior para testar o espacamento correto da aplicacao',
-    date: '14/08/1999',
-    tasks: ["Fazer codigos!","Terminar projeto JSX", "Estudar!", "Fazer a compra do mes!"]
-  }]);
+  const [listProject, setListProject] = useState([]);
   const [projectSelected, setProjectSelected] = useState(null);
   const getInformationProject = useRef();
+  const getNewTask = useRef();
   const ActiveScreen = ALL_SCREENS[screen];
 
   function changeScreenProject(nameScreen, showProject=null, projectList=listProject){
@@ -58,28 +54,29 @@ function App() {
     });
 
     setScreen("initialScreen");
-
   }
   
-  function updateProject(newList){
-    setListProject(newList);
-    (newList.length < listProject.length) && setScreen('initialScreen');
-  }
-
-  function deleteProjectSelected(description){
-    const newList = listProject.filter(project => project.description !== description);
-    updateProject(newList);
-  }
-
-  function deleteTask(project){
+  function updateProjectInList(project){
     const index = listProject.findIndex(proj => proj.description === project.description);
     let newList = structuredClone(listProject);
     newList[index] = project;
 
     setListProject(newList);
     changeScreenProject('project', project, newList);
-    
   }
+
+  function addNewTaskInProject(project){
+    project.tasks.push(getNewTask.current.value);
+    getNewTask.current.value = "";
+    updateProjectInList(project);
+  }
+
+  function deleteProjectSelected(description){
+    const newList = listProject.filter(project => project.description !== description);
+    setListProject(newList);
+    setScreen('initialScreen');
+  }
+
 
   return (
     <div className="flex h-screen py-10">
@@ -93,7 +90,9 @@ function App() {
         saveProject={handleProjects} 
         project={projectSelected}
         deleteProject={deleteProjectSelected}
-        deleteTask={deleteTask}
+        deleteTask={updateProjectInList}
+        getNewTask={getNewTask}
+        addTask={addNewTaskInProject}
       />
     </div>
   );

@@ -1,6 +1,6 @@
 import Task from "../Task";
 
-export default function Project({project, deleteProject, deleteTask}){
+export default function Project({project, deleteProject, deleteTask, getNewTask, addTask}){
 
     const {title,description,date,tasks} = project;
     const h1Style = "flex-1 break-all font-roboto font-bold text-orange-950";
@@ -36,8 +36,8 @@ export default function Project({project, deleteProject, deleteTask}){
             <section className="flex flex-col space-y-3">
                 <h1 className={`${h1Style} text-2xl`}>Tasks</h1>
                 <div className="space-x-4">
-                    <input type="text" className="bg-gray-300 focus:outline-blue-500"/>
-                    <button className={buttonStyle}>Add Task</button>
+                    <input ref={getNewTask} type="text" className="bg-gray-300 focus:outline-blue-500"/>
+                    <button className={buttonStyle} onClick={() => addTask(project)}>Add Task</button>
                 </div>
 
                 {!hasTask && <p className="font-roboto">This project does not have any tasks yet.</p>}
