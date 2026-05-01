@@ -1,9 +1,19 @@
-export default function Project({project}){
+import Task from "../Task";
+
+export default function Project({project, deleteProject, deleteTask}){
 
     const {title,description,date,tasks} = project;
     const h1Style = "flex-1 break-all font-roboto font-bold text-orange-950";
     const buttonStyle = 'hover:font-bold';
-    const hasTask = tasks.lenght > 0 ? true : false;
+    const hasTask = tasks.length > 0 ? true : false;
+
+    function deleteThisTask(taskExcluded){
+        const newArrayTasks = project.tasks.filter(task => task !== taskExcluded);
+        let newProject = {...project};
+        newProject.tasks = [...newArrayTasks];  
+
+        deleteTask(newProject);
+    }
 
     return(
         <div className="flex flex-1 flex-col space-y-5 px-10 py-8">
@@ -13,7 +23,9 @@ export default function Project({project}){
                     <h1 className={`${h1Style} text-4xl`}>
                         {title}
                     </h1>
-                    <button className={buttonStyle}>Delete</button>
+                    <button className={buttonStyle} onClick={() => deleteProject(description)}>
+                        Delete
+                    </button>
                 </div>
                 <p className="font-roboto text-2xs text-gray-400">{date}</p>
                 <p className="font-roboto">{description}</p>
@@ -29,9 +41,13 @@ export default function Project({project}){
                 </div>
 
                 {!hasTask && <p className="font-roboto">This project does not have any tasks yet.</p>}
-                {hasTask && <ul></ul>}
+                {hasTask && 
+                    <ul className="flex flex-col bg-gray-300 rounded-xs px-3 py-5 space-y-3">
+                        {tasks.map((task,index) => <Task key={index} taskName={task} deleteTask={deleteThisTask}/>)}
+                    </ul>
+                }
             </section>
-            {/* {tasks.map(task => <p>{task}</p>)} */}
+            
         </div>
     );
 

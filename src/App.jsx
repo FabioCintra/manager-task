@@ -26,21 +26,19 @@ function App() {
     title:'Teste',
     description:'Estou fazendo um descricao maior para testar o espacamento correto da aplicacao',
     date: '14/08/1999',
-    tasks: []
+    tasks: ["Fazer codigos!","Terminar projeto JSX", "Estudar!", "Fazer a compra do mes!"]
   }]);
   const [projectSelected, setProjectSelected] = useState(null);
-
   const getInformationProject = useRef();
-
   const ActiveScreen = ALL_SCREENS[screen];
 
-  function changeScreenProject(nameScreen, showProject=null){
+  function changeScreenProject(nameScreen, showProject=null, projectList=listProject){
     if(showProject){
       setProjectSelected( 
-        listProject.find(project => project.description === showProject.description)
+        projectList.find(project => project.description === showProject.description)
       );
     }
-    setScreen(nameScreen);  
+    setScreen(nameScreen); 
   }
 
   function handleProjects(){
@@ -62,11 +60,41 @@ function App() {
     setScreen("initialScreen");
 
   }
+  
+  function updateProject(newList){
+    setListProject(newList);
+    (newList.length < listProject.length) && setScreen('initialScreen');
+  }
+
+  function deleteProjectSelected(description){
+    const newList = listProject.filter(project => project.description !== description);
+    updateProject(newList);
+  }
+
+  function deleteTask(project){
+    const index = listProject.findIndex(proj => proj.description === project.description);
+    let newList = structuredClone(listProject);
+    newList[index] = project;
+
+    setListProject(newList);
+    changeScreenProject('project', project, newList);
+    
+  }
 
   return (
     <div className="flex h-screen py-10">
-      <InsideBar projects={listProject} changeScreen={changeScreenProject}/>
-      <ActiveScreen ref={getInformationProject} onChange={changeScreenProject} saveProject={handleProjects} project={projectSelected}/>
+      <InsideBar 
+        projects={listProject} 
+        changeScreen={changeScreenProject}
+      />
+      <ActiveScreen 
+        ref={getInformationProject} 
+        onChange={changeScreenProject}
+        saveProject={handleProjects} 
+        project={projectSelected}
+        deleteProject={deleteProjectSelected}
+        deleteTask={deleteTask}
+      />
     </div>
   );
 }
